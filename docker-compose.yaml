@@ -1,0 +1,59 @@
+version: "3"
+services:
+  spark-master:
+    image: docker.io/bitnami/spark:latest
+    container_name: spark-master
+    hostname: spark-master
+    user: root
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    volumes:
+      - ./apps:/opt/apps
+    ports:
+      - "5200:8080"
+      - "7077:7077"
+
+  spark-worker-1:
+    image: docker.io/bitnami/spark:latest
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+
+  flight-aggregator:
+    build:
+      context: ./apps/flight-route-aggregator/
+      dockerfile: ./apps/flight-route-aggregator/Dockerfile
+
+networks:
+  default:
+    name: "spark-network"
+
+ # spark-worker:
+ #    image: docker.io/bitnami/spark:latest
+ #    container_name: spark-worker
+ #    hostname: spark-worker
+ #    user: root
+ #    environment:
+ #      - SPARK_MODE=worker
+ #      - SPARK_MASTER_URL=spark://spark-master:7077
+ #      # - SPARK_RPC_AUTHENTICATION_ENABLED=no
+ #      # - SPARK_RPC_ENCRYPTION_ENABLED=no
+ #      # - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+ #      # - SPARK_SSL_ENABLED=no
+ #    ports:
+ #      - "5201:8080"
+ #      - "7000:7000"
+ #    # volumes:
+ #      # - ../streamingProje:/home
+ #      # - /opt/spark/conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+ #      # - /opt/spark/jars:/opt/bitnami/spark/ivy:z
