@@ -1,5 +1,6 @@
 import sys
 import os
+from geopy.geocoders import Nominatim
 from pyspark.conf import SparkConf
 from pyspark.sql import SparkSession, Catalog
 from pyspark.sql import DataFrame, DataFrameStatFunctions, DataFrameNaFunctions
@@ -22,6 +23,13 @@ spark_conf.setAll([
 
 spark = SparkSession.builder.config(conf=spark_conf).getOrCreate()
 sc = spark.sparkContext
+
+# Reverse geolocator function (input: (lat, lon) | output: country name)    
+def locator(latitude, longitude):
+    geolocator = Nominatim(user_agent="geoapiExercises")
+    location = geolocator.reverse(latitude + "," + longitude)
+    country = location.raw["address"].get("country", "")
+    return country
 
 data = sc.parallelize(list("Hello World"))
 counts = data.map(lambda x:
