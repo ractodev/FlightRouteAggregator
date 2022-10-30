@@ -32,7 +32,8 @@ services:
       - SPARK_SSL_ENABLED=no
 
   zookeeper:
-    image: docker.io/bitnami/zookeeper:3.8
+    container_name: zookeeper
+    image: docker.io/bitnami/zookeeper:latest
     ports:
       - "2181:2181"
     volumes:
@@ -41,12 +42,16 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka:
-    image: docker.io/bitnami/kafka:3.3
+    image: docker.io/bitnami/kafka:latest
+    container_name: kafka
     ports:
       - "9092:9092"
     volumes:
       - "kafka_data:/bitnami"
     environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
@@ -64,12 +69,24 @@ services:
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
 
   flight-aggregator:
+    container_name: flight-aggregator
     depends_on:
       - kafka
       - spark-master
     build:
       context: ./apps/flight-route-aggregator
 
+  kafdrop:
+    container_name: kafdrop
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "5203:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:29092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on:
+      - "kafka"
 
 networks:
   default:
@@ -81,22 +98,3 @@ volumes:
   kafka_data:
     driver: local
 
- # spark-worker:
- #    image: docker.io/bitnami/spark:latest
- #    container_name: spark-worker
- #    hostname: spark-worker
- #    user: root
- #    environment:
- #      - SPARK_MODE=worker
- #      - SPARK_MASTER_URL=spark://spark-master:7077
- #      # - SPARK_RPC_AUTHENTICATION_ENABLED=no
- #      # - SPARK_RPC_ENCRYPTION_ENABLED=no
- #      # - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
- #      # - SPARK_SSL_ENABLED=no
- #    ports:
- #      - "5201:8080"
- #      - "7000:7000"
- #    # volumes:
- #      # - ../streamingProje:/home
- #      # - /opt/spark/conf/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
- #      # - /opt/spark/jars:/opt/bitnami/spark/ivy:z

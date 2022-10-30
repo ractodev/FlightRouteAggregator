@@ -1,13 +1,14 @@
-[{
-        "id": "United States",
-        "datum": 3088
-    },
-    {
-        "id": "Mexico",
-        "datum": 10750
-    },
-    {
-        "id": "Canada",
-        "datum": 500
-    }
+[
+  {
+    "id": "United States",
+    "datum": 3088
+  },
+  {
+    "id": "Mexico",
+    "datum": 10750
+  },
+  {
+    "id": "Canada",
+    "datum": 500
+  }
 ]
