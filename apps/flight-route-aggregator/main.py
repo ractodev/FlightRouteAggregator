@@ -25,11 +25,14 @@ spark = SparkSession.builder.config(conf=spark_conf).getOrCreate()
 sc = spark.sparkContext
 
 # Reverse geolocator function (input: (lat, lon) | output: country name)    
-def locator(latitude, longitude):
-    geolocator = Nominatim(user_agent="geoapiExercises")
-    location = geolocator.reverse(latitude + "," + longitude)
-    country = location.raw["address"].get("country", "")
-    return country
+def locator(lat, lon):
+    try:
+        geolocator = Nominatim(user_agent="geoapiExercises")
+        location = geolocator.reverse(lat + "," + lon)
+        country = location.raw['address'].get('country', '')
+        return country
+    except:
+        return "International Waters"
 
 data = sc.parallelize(list("Hello World"))
 counts = data.map(lambda x:
