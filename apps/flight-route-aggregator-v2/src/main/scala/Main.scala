@@ -1,6 +1,7 @@
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.{col, from_json}
 import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType};
+import io.github.coordinates2country.Coordinates2Country;
 
 case class FlightRoute(Tag: String, To: String, From: String, Timestamp: String, Lat: Double, Lon: Double, Alt: Double);
 
@@ -15,6 +16,11 @@ object Main {
       new StructField("Lon", DoubleType),
       new StructField("Alt", DoubleType))
     );
+    
+    def geocoder(lat:Double, lon:Double) : String = {
+        var country:String = Coordinates2Country.country(lat, lon);
+        return country;
+    }
 
     val spark = SparkSession
       .builder()
