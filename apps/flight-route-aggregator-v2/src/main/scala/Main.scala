@@ -47,7 +47,7 @@ object Main {
       //.withColumn("country", get_country_udf(col("lat"), col("lon")))
       .writeStream
       .format("mongodb")
-      .option("spark.mongodb.connection.uri", "mongodb+srv:g/flight-route-publisher:WGfvPkzfyNL31grO@flightdatacluster.neyieqx.mongodb.net/flights.flight-aggregated-data?retryWrites=true&w=majority")
+      .option("spark.mongodb.connection.uri", "mongodb+srv://flight-route-publisher:WGfvPkzfyNL31grO@flightdatacluster.neyieqx.mongodb.net/flights.flight-aggregated-data?retryWrites=true&w=majority")
       .option("spark.mongodb.database", "flights")
       .option("spark.mongodb.collection", "flight-aggregated-data")
       .option("spark.mongodb.change.stream.publish.full.document.only", "true")

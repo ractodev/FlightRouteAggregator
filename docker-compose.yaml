@@ -70,13 +70,23 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
 
-  flight-aggregator:
-    container_name: flight-aggregator
+  # flight-aggregator:
+  #   container_name: flight-aggregator
+  #   depends_on:
+  #     - kafka
+  #     - spark-master
+  #   build:
+  #     context: ./apps/flight-route-aggregator
+  #
+
+
+  flight-aggregator-v2:
+    container_name: flight-aggregator-v2
     depends_on:
       - kafka
       - spark-master
     build:
-      context: ./apps/flight-route-aggregator
+      context: ./apps/flight-route-aggregator-v2
 
   flight-route-producer:
     container_name: flight-route-producer
