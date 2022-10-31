@@ -1,5 +1,5 @@
 FROM docker.io/bitnami/spark:latest 
-RUN pip3 install pyspark
+RUN pip3 install pyspark geopy
 WORKDIR /app
 COPY . .
-CMD ["python3", "./main.py"]
+CMD ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.2", "main.py"]
