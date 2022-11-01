@@ -7,8 +7,6 @@ COPY . /App
 RUN /opt/sbt/bin/sbt clean compile package
 
 FROM docker.io/bitnami/spark:latest 
-USER root
 WORKDIR /App
 COPY --from=build /App/target/scala-2.12 /App
-RUN mkdir /checkpoint
-CMD ["spark-submit", "--class", "Main", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.2,org.mongodb.spark:mongo-spark-connector:10.0.0", "flight-route-aggregator-v2_2.12-0.1.0-SNAPSHOT.jar"]
+CMD ["spark-submit", "--class", "Main", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.2,org.mongodb.spark:mongo-spark-connector:10.0.0,io.github.coordinates2country:coordinates2country:1.2", "flight-route-aggregator-v2_2.12-0.1.0-SNAPSHOT.jar"]

@@ -4,7 +4,6 @@ services:
     image: docker.io/bitnami/spark:latest
     container_name: spark-master
     hostname: spark-master
-    user: root
     environment:
       - SPARK_MODE=master
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -95,8 +94,10 @@ services:
       - DatabaseName=flights
       - CollectionName=flight_path_data_v2
       - KafkaHost=kafka:29092
+      - SimulationSpeedMultiplier=6
     depends_on:
       - kafka
+      - flight-aggregator-v2
     build:
       context: ./apps/flight-route-publisher
 

@@ -7,7 +7,7 @@ val sparkVersion = "3.3.0"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % sparkVersion % "provided"
 libraryDependencies += "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion % "provided"
 libraryDependencies += "org.apache.spark" %% "spark-streaming" % sparkVersion % "provided"
-libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector" % "10.0.0" % "provided"
+libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector" % "10.0.4" % "provided"
 libraryDependencies += "io.github.coordinates2country" % "coordinates2country" % "1.2"
 lazy val root = (project in file("."))
   .settings(

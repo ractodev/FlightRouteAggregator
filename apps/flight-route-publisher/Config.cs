@@ -5,4 +5,5 @@ public class Config
     public string CollectionName { get; set; }
     public string KafkaHost { get; set; }
     public string KafkaTopic { get; set; }
+    public int SimulationSpeedMultiplier { get; set; } = 1;
 }
