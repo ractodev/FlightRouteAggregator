@@ -12,7 +12,7 @@
 #
 # JARs aren't checked in, they are fetched by sbt
 #
-/lib/*.jar
+#/lib/*.jar
 /test/files/codelib/*.jar
 /test/files/lib/*.jar
 /test/files/speclib/instrumented.jar
