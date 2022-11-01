@@ -1,3 +1,5 @@
+
+# %%
 import circlify
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -7,6 +9,8 @@ import matplotlib.animation as animation
 import json
 import time
 
+
+# %%
 fig, ax = plt.subplots(figsize=(10,10))
 
 def animate(i):
@@ -62,6 +66,15 @@ def animate(i):
     [p.remove() for p in reversed(ax.patches)]
     [n.remove() for n in reversed(ann_name_list)]
     [s.remove() for s in reversed(ann_size_list)]
-ani = animation.FuncAnimation(fig, animate, interval=1000)
 
+
+ani = animation.FuncAnimation(fig, animate, interval=1000)
 plt.show()
+
+
+for cl in db.list_collections():
+    print(cl)
+
+for db in client.list_databases():
+    print(db)
+        
