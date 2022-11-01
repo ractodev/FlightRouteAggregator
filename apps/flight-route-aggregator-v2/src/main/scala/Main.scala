@@ -12,6 +12,11 @@ import org.apache.spark.sql.streaming.StreamingQuery
 import com.mongodb.spark.sql.connector.config.WriteConfig
 import geocode.ReverseGeoCode
 import java.io.FileInputStream
+import org.apache.spark.sql.Dataset
+import org.apache.spark.sql.Row
+import com.mongodb.client.MongoClient
+import com.mongodb.client.MongoClientFactory
+import com.mongodb.spark.sql.connector.connection.DefaultMongoClientFactory
 
 case class FlightRoute(
     Tag: String,
@@ -83,38 +88,41 @@ object Main {
       .distinct()
       .groupByKey(o => o._2)
       .count()
-      .as("count")
+      .map(o=> FlightRouteAggreagted(o._1, o._1, o._2))
 
     val writer = query.writeStream
       .option("checkpointLocation", "/opt/spark/checkpoint")
       .option("forceDeleteTempCheckpointLocation", "true")
       .outputMode("update")
 
-    UseConsole(writer).awaitTermination()
+    UseMongo(writer).awaitTermination()
   }
 
   def UseMongo[T](writer: DataStreamWriter[T]): StreamingQuery = {
-
-    import scala.collection.JavaConverters._;
-    var config = Map[String, String](
-      "connection.uri" -> "mongodb+srv://flight-route-publisher:WGfvPkzfyNL31grO@flightdatacluster.neyieqx.mongodb.net/flights.flight-aggregated-data?retryWrites=true&w=majority",
-      "database" -> "flights",
-      "collection" -> "flight-aggregated-data",
-      "change.stream.publish.full.document.only" -> "true"
-    ).asJava
-
-    var mongoConfig = MongoConfig.writeConfig(config).getOptions().asScala
-
     return writer
-      .format("mongodb")
-      .options(mongoConfig)
       // .option(
       //   "spark.mongodb.connection.uri",
-      //   "mongodb+srv://flight-route-publisher:WGfvPkzfyNL31grO@flightdatacluster.neyieqx.mongodb.net/flights.flight-aggregated-data?retryWrites=true&w=majority"
+      //   "mongodb://root:root@mongodb:27017"
       // )
       // .option("spark.mongodb.database", "flights")
       // .option("spark.mongodb.collection", "flight-aggregated-data")
       // .option("spark.mongodb.change.stream.publish.full.document.only", "true")
+      .foreachBatch((outputDf: Dataset[T], bid: Long) => {
+        outputDf.write
+          .format("mongodb")
+          .option(
+            "spark.mongodb.connection.uri",
+            "mongodb://root:root@mongodb:27017"
+          )
+          .option("spark.mongodb.database", "flights")
+          .option("spark.mongodb.collection", "flight-aggregated-data")
+          .option(
+            "spark.mongodb.change.stream.publish.full.document.only",
+            "true"
+          )
+          .mode("append")
+          .save();
+      })
       .start()
   }
 
