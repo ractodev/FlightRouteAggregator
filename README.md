@@ -1,7 +1,9 @@
 ####
 
 
-Docker setup
+**Docker setup**
+
+Enter info here (still working on getting mine running)
 
 
 ####
