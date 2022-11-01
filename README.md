@@ -7,7 +7,7 @@ Docker setup
 ####
 
 
-**Python GUI
+**Python GUI**
 
 The Python program connects to the stored mongodb collection of mapped country data by incoming stream. The python GUI updates every 10 seconds to account for planes that leave and enter new airspaces. This is shown via proportional circles which show both the country and number of planes currently in that airspace
 
