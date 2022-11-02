@@ -8,16 +8,36 @@ import numpy as np
 import matplotlib.animation as animation
 import json
 import time
+from pymongo import MongoClient
+import pycountry
 
+# %%
+
+def convertList(listChange):
+    for x in listChange:
+        x['id'] = pycountry.countries.get(alpha_2=x['Country']).name
+        x['datum'] = x['Count']
+        del x['Count']
+        del x['_id']
+        del x['Country']
+    return listChange
 
 # %%
 fig, ax = plt.subplots(figsize=(10,10))
 
 def animate(i):
-    f = open('/Users/daniel.burke/Downloads/test_data.json')
-    test_data = json.load(f)
+
+    client = MongoClient("mongodb+srv://group333:ID2221@flightdatacluster.neyieqx.mongodb.net/?retryWrites=true&w=majority"); 
+    db = client.flights
+    collection = db['flight-aggregated-data']
+    cursor = collection.find({})
+    all_data = list(cursor)
+
+    final_data = convertList(all_data)
+    #f = open('/Users/daniel.burke/Downloads/test_data.json')
+    #test_data = json.load(f)
     circles = circlify.circlify(
-        test_data, 
+        final_data, 
         show_enclosure=False, 
         target_enclosure=circlify.Circle(x=0, y=0, r=1)
     )
@@ -72,9 +92,9 @@ ani = animation.FuncAnimation(fig, animate, interval=1000)
 plt.show()
 
 
-for cl in db.list_collections():
+"""for cl in db.list_collections():
     print(cl)
 
 for db in client.list_databases():
-    print(db)
+    print(db)"""
         
