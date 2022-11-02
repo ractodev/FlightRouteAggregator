@@ -94,7 +94,7 @@ services:
       - DatabaseName=flights
       - CollectionName=flight_path_data_v2
       - KafkaHost=kafka:29092
-      - SimulationSpeedMultiplier=6
+      - SimulationSpeedMultiplier=15
     depends_on:
       - kafka
       - flight-aggregator-v2
