@@ -88,7 +88,7 @@ object Main {
       .distinct()
       .groupByKey(o => o._2)
       .count()
-      .map(o=> FlightRouteAggreagted(o._1, o._1, o._2))
+      .map(o => FlightRouteAggreagted(o._1, o._1, o._2))
 
     val writer = query.writeStream
       .option("checkpointLocation", "/opt/spark/checkpoint")
@@ -112,7 +112,7 @@ object Main {
           .format("mongodb")
           .option(
             "spark.mongodb.connection.uri",
-            "mongodb://root:root@mongodb:27017"
+            "mongodb+srv://group333:ID2221@flightdatacluster.neyieqx.mongodb.net/?retryWrites=true&w=majority"
           )
           .option("spark.mongodb.database", "flights")
           .option("spark.mongodb.collection", "flight-aggregated-data")
