@@ -80,6 +80,7 @@ Rel(sparkMaster, sparkWorker, "")
 
 ```shell
 cd ./frontend_gui
+source env/bin/activate
 python3 plotting.py
 ```
 
