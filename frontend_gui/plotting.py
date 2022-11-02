@@ -3,15 +3,12 @@
 import circlify
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import pandas as pd
-import numpy as np
 import matplotlib.animation as animation
-import json
-import time
 from pymongo import MongoClient
 import pycountry
 
 # %%
+
 
 def convertList(listChange):
     for x in listChange:
@@ -22,12 +19,15 @@ def convertList(listChange):
         del x['Country']
     return listChange
 
+
 # %%
-fig, ax = plt.subplots(figsize=(10,10))
+fig, ax = plt.subplots(figsize=(10, 10))
+
 
 def animate(i):
 
-    client = MongoClient("mongodb+srv://group333:ID2221@flightdatacluster.neyieqx.mongodb.net/?retryWrites=true&w=majority"); 
+    client = MongoClient(
+        "mongodb+srv://group333:ID2221@flightdatacluster.neyieqx.mongodb.net/?retryWrites=true&w=majority")
     db = client.flights
     collection = db['flight-aggregated-data']
     cursor = collection.find({})
@@ -37,14 +37,14 @@ def animate(i):
     #f = open('/Users/daniel.burke/Downloads/test_data.json')
     #test_data = json.load(f)
     circles = circlify.circlify(
-        final_data, 
-        show_enclosure=False, 
+        final_data,
+        show_enclosure=False,
         target_enclosure=circlify.Circle(x=0, y=0, r=1)
     )
 
-    #ax.clear()
-    #fig.clear(True)
-    
+    # ax.clear()
+    # fig.clear(True)
+
     # Title
     ax.set_title('Passenger Planes by Country Airspace')
 
@@ -71,17 +71,20 @@ def animate(i):
     for circle in circles:
         x, y, r = circle
 
-        ax.add_patch(patches.Circle((x, y), r, alpha=0.2, linewidth=2, facecolor='white', edgecolor="black"))
+        ax.add_patch(patches.Circle((x, y), r, alpha=0.2,
+                     linewidth=2, facecolor='white', edgecolor="black"))
         id_label = circle.ex["id"]
-        datum_label=circle.ex["datum"]
-        
-        ann_name = plt.annotate(id_label, (x,y ) ,va='center', ha='center', fontsize=r*30, bbox=dict(facecolor='white', edgecolor='black', boxstyle='round', pad=.5))
+        datum_label = circle.ex["datum"]
+
+        ann_name = plt.annotate(id_label, (x, y), va='center', ha='center', fontsize=r*30,
+                                bbox=dict(facecolor='white', edgecolor='black', boxstyle='round', pad=.5))
         ann_name_list.append(ann_name)
-        
-        ann_size = plt.annotate(datum_label, (x,y-((1/2)*r) ) ,va='center', ha='center', fontsize=r*30, bbox=dict(facecolor='white', edgecolor='black', boxstyle='round', pad=.5))
+
+        ann_size = plt.annotate(datum_label, (x, y-((1/2)*r)), va='center', ha='center', fontsize=r*30,
+                                bbox=dict(facecolor='white', edgecolor='black', boxstyle='round', pad=.5))
         ann_size_list.append(ann_size)
-        #plt.pause(3)
-        #plt.draw
+        # plt.pause(3)
+        # plt.draw
     plt.pause(10)
     [p.remove() for p in reversed(ax.patches)]
     [n.remove() for n in reversed(ann_name_list)]
@@ -97,4 +100,3 @@ plt.show()
 
 for db in client.list_databases():
     print(db)"""
-        
