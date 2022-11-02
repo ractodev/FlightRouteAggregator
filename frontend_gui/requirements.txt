@@ -1,0 +1,7 @@
+wheel
+pandas
+circlify
+matplotlib
+pymongo
+ipaddress
+pycountry
