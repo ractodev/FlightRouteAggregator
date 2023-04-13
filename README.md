@@ -72,13 +72,15 @@ Rel(consumer, sparkMaster, "")
 Rel(sparkMaster, sparkWorker, "")
 @enduml
 ```
-## Use
+## Prerequisite
 
-Prerequisite: PyMongo, used for connecting to the MongoDB database, is not compatible with Python 3.10 and newer versions. Please use earlier versions of Python, such as 3.8, which have been successfully tested. For Mac users running Python 3.6 or later, run the following command in the terminal:
+PyMongo, used for connecting to the MongoDB database, is not compatible with Python 3.10 and newer versions. Please use earlier versions of Python, such as 3.8, which have been successfully tested. For Mac users running Python 3.6 or later, run the following command in the terminal:
 ```shell
 open "/Applications/Python <YOUR PYTHON VERSION>/Install Certificates.command"
 ```
 This ensures that OpenSSL can access the latest root certificates on the system.
+
+## Use
 
 ### Back-End
 - Install [Docker](https://docs.docker.com/engine/install/) on your local machine.
